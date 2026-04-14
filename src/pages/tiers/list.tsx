@@ -4,13 +4,14 @@ import {Search} from "lucide-react";
 import {Input} from "@/components/ui/input.tsx";
 import {useMemo, useState} from "react";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select.tsx";
-import {GENRES_OPTIONS} from "@/constants";
+import {TYPES_OPTIONS} from "@/constants";
 import {CreateButton} from "@/components/refine-ui/buttons/create.tsx";
 import {useTable} from "@refinedev/react-table";
-import {Tier} from "@/types";
+import {Words} from "@/types";
 import {ColumnDef} from "@tanstack/react-table";
 import {Badge} from "@/components/ui/badge.tsx";
 import {DataTable} from "@/components/refine-ui/data-table/data-table.tsx";
+import {Link} from "react-router";
 
 const TiersList = () => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -20,29 +21,29 @@ const TiersList = () => {
         { field: 'name', operator: 'contains' as const, value: searchQuery }
     ];
 
-    const subjectTable = useTable<Tier>({
-        columns: useMemo<ColumnDef<Tier>[]>(()=>[
-            {
-                id: 'code',
-                accessorKey: 'code',
-                size: 100,
-                header: ()=> <p className="column-title ml-2">code</p>,
-                cell: ({ getValue }) => <Badge>{getValue<string>()}</Badge>
-            },
+    const subjectTable = useTable<Words>({
+        columns: useMemo<ColumnDef<Words>[]>(()=>[
             {
                 id: 'name',
                 accessorKey: 'name',
-                size: 200,
+                size: 50,
                 header: ()=> <p className="column-title ml-2">Name</p>,
                 cell: ({ getValue }) => <span className="text-foreground">{getValue<string>()}</span>,
                 filterFn: 'includesString'
             },
             {
-                id: 'Department',
-                accessorKey: 'Department',
-                size:150,
-                header: () => <p className = "column-title ml-2">Department</p>,
-                cell: ({getValue}) => <Badge variant="secondary">{getValue<string>()}</Badge>
+                id: 'type',
+                accessorKey: 'type.name',
+                size: 50,
+                header: ()=> <p className="column-title ml-2">Type</p>,
+                cell: ({ getValue }) => <Badge>{getValue<string>()}</Badge>
+            },
+            {
+                id: 'link',
+                accessorKey: 'link',
+                size:50,
+                header: () => <p className = "column-title ml-2">Link</p>,
+                cell: ({getValue}) => <a target="_blank" href={getValue<string>()} className="text-foreground">Click here</a>
             },
             {
                 id: 'description',
@@ -54,7 +55,7 @@ const TiersList = () => {
 
         ], []),
         refineCoreProps:{
-            resource: 'tiers',
+            resource: 'words',
             pagination: { pageSize: 10, mode: 'server'},
             filters: {
                 permanent: [...searchFilter],
@@ -70,7 +71,7 @@ const TiersList = () => {
         <ListView>
             <Breadcrumb />
 
-            <h1 className="page-title">Tiers</h1>
+            <h1 className="page-title">Words</h1>
 
             <div className="intro-row">
                 <p>blah blah blah</p>
@@ -98,9 +99,9 @@ const TiersList = () => {
 
                             <SelectContent>
                                 <SelectItem value="all">
-                                    All Genres
+                                    All Words
                                 </SelectItem>
-                                {GENRES_OPTIONS.map(genre => (
+                                {TYPES_OPTIONS.map(genre => (
                                     <SelectItem key={genre.value} value={genre.label}>
                                         {genre.label}
                                     </SelectItem>
