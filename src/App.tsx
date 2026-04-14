@@ -43,7 +43,7 @@ function App() {
                       name: 'tiers',
                       list: '/tiers',
                       create: '/tiers/create',
-                      meta: { label: 'tiers', icon: <BookOpen />}
+                      meta: { label: 'Tiers', icon: <BookOpen />}
                   }
               ]}
             >
